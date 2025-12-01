@@ -10,12 +10,15 @@ import java.io.InputStream;
 
 public class App {
 	public static void main(String[] args) throws Exception {
-		InputStream input = App.class.getClassLoader().getResourceAsStream("input.txt");
+		InputStream input = App.class.getClassLoader().getResourceAsStream("input_part1.txt");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		String line = reader.readLine();
 
 		while (line != null) {
+			System.out.println(Dial.stringify(line));
 			Dial.turn(line);
+			System.out.println(Dial.stringify(line));
+			System.out.println("");
 			line = reader.readLine();
 		}
 		System.out.println(Dial.current);
@@ -28,42 +31,46 @@ class Dial {
 	public static int current = 50;
 	public static int zero_events = 0;
 
+	public static String stringify(String operation) {
+		return "Dial: " + current + ", Magnitude: " + operation + ", Zero Events: " + zero_events;
+	}
+
 	public static void turn(String operation) {
 		int mag = Integer.parseInt(operation.substring(1));
-		System.out.println("Dial: " + current + ", Magnitude: " + operation);
 		if (operation.charAt(0) == 'L') {
 			turnLeft(mag);
 		} else {
 			turnRight(mag);
 		}
-
-		if (current == 0) {
-			zero_events++;
-		}
 	}
 
 	public static void turnLeft(int magnitude) {
-		magnitude = magnitude % 100;
-		if (magnitude > current) {
-			int diff = magnitude - current;
-			current = 100 - diff;
+		zero_events += Math.floorDiv(magnitude, 100);
+		magnitude %= 100;
+
+		if (magnitude >= current) {
+			magnitude -= current;
+			if (current != 0) {
+				zero_events++;
+			}
+			current = (100 - magnitude) % 100;
 		} else {
 			current -= magnitude;
+			if (current == 0) {
+				zero_events++;
+			}
 		}
-
 	}
 
 	public static void turnRight(int magnitude) {
-		magnitude = magnitude % 100;
-		if (magnitude > (100 - current)) {
-			int diff = (magnitude + current - 100);
-			current = diff;
+		zero_events += Math.floorDiv(magnitude, 100);
+		magnitude %= 100;
+
+		if (current + magnitude >= 100) {
+			current = (current + magnitude) % 100;
+			zero_events++;
 		} else {
 			current += magnitude;
-		}
-
-		if (current == 100) {
-			current = 0;
 		}
 	}
 }
