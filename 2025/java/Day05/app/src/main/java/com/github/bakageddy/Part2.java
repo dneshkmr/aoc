@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 
 public class Part2 {
 	public static void run(String[] args) throws Exception {
-		InputStream in = Part2.class.getClassLoader().getResourceAsStream("mock.txt");
+		InputStream in = Part2.class.getClassLoader().getResourceAsStream("input.txt");
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		String line = null;
 		ArrayList<Range> ranges = new ArrayList<>();
@@ -21,46 +21,33 @@ public class Part2 {
 			ranges.addLast(Range.parseRange(line));
 		}
 
-		ArrayList<Range> old = ranges;
-		while (true) {
-			ArrayList<Range> merged = mergeRanges(ranges);
-			if (old.size() == merged.size()) {
-				break;
-			}
-			old = merged;
-		}
-
-		System.out.println(countRangeValues(old));
+		ArrayList<Range> result = mergeRanges(ranges);
+		System.out.println(countRangeValues(result));
 	}
 
 	public static ArrayList<Range> mergeRanges(ArrayList<Range> ranges) {
 		ArrayList<Range> result = new ArrayList<>();
 		Collections.sort(ranges);
-		for (int i = 0; i < ranges.size() - 1; i++) {
-			Range current = ranges.get(i);
-			for (int j = i + 1; j < ranges.size(); j++) {
-				Range next = ranges.get(j);
-				if (current.isPresent(next.start) || current.isPresent(next.end) || next.isPresent(current.start) || next.isPresent(current.end)) {
-					current.merge(next);
-					result.addLast(current);
-				}
-			}
+		Range prev = ranges.get(0);
 
-			result.addLast(current);
+		for (int i = 1; i < ranges.size(); i++) {
+			Range r = ranges.get(i);
+			if (r.start <= prev.end) {
+				prev.merge(r);
+			} else {
+				result.add(prev);
+				prev = r;
+			}
 		}
+
+		result.add(prev); // Don't forget this
 		return result;
 	}
 
 	public static long countRangeValues(ArrayList<Range> ranges) {
 		long count = 0;
-		HashSet<Range> seen = new HashSet<>();
 		for (Range r : ranges) {
-			if (seen.contains(r)) {
-				continue;
-			}
 			count += r.range();
-			seen.add(r);
-			System.out.println(seen);
 		}
 		return count;
 	}

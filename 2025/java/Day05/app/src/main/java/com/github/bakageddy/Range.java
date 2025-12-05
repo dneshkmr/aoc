@@ -30,7 +30,7 @@ public class Range implements Comparable<Range> {
 
 	public void merge(Range other) {
 		this.start = Math.min(this.start, other.start);
-		this.end = Math.min(this.end, other.end);
+		this.end = Math.max(this.end, other.end);
 	}
 
 	@Override
