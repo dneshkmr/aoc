@@ -5,6 +5,7 @@ package com.github.bakageddy;
 
 public class App {
     public static void main(String[] args) throws Exception {
-		Part1.run(args);
+		// Part1.run(args);
+		Part2.run(args);
     }
 }

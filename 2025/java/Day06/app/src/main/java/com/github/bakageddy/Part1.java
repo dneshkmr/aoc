@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.OptionalLong;
-import java.util.Arrays;
 
 public class Part1 {
 	public static void run(String[] args) throws Exception {
