@@ -3,7 +3,6 @@ package com.github.bakageddy;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class Part1 {
@@ -48,4 +47,3 @@ public class Part1 {
 		System.out.println(count);
 	}
 }
-

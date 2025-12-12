@@ -22,4 +22,9 @@ public class Manifold {
 		}
 		return Optional.empty();
 	} 
+
+	public long getPathCount() {
+
+		return 0;
+	} 
 }
